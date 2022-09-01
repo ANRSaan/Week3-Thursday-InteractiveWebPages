@@ -1,10 +1,24 @@
-const printDigits = num => {
-  reverse = 0
-  whileBreaker = true
-  while (num) {
-    reverse = num % 10
-    console.log(reverse) 
-    num = Math.floor(num/ 10)
-  }
-}
-printDigits(123)
+// const printDigits = num => {
+//   reverse = 0
+//   whileBreaker = true
+//   while (num) {
+//     reverse = num % 10
+//     console.log(reverse) 
+//     num = Math.floor(num/ 10)
+//   }
+// }
+// printDigits(123)
+
+let num = 4562;
+    // Function to reverse digits of num
+    function reverseDigits(num) {
+        let rev_num = 0;
+        while(num > 0)
+        {
+            rev_num = rev_num * 10 + num % 10;
+            num = Math.floor(num / 10);
+        }
+        return rev_num;
+    }
+ // function call  
+    console.log(reverseDigits(num));
