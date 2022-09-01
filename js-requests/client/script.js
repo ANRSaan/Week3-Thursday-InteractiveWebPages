@@ -11,6 +11,8 @@
 
 // CODE HERE
 
+const sayHelloButton = document.querySelector('#say-hello-button')
+
 
 // PROBLEM 2
 /*
@@ -21,6 +23,13 @@
 
 // CODE HERE
 
+const helloColorChanger = () => {
+    sayHelloButton.style.color = 'red'
+    console.log(sayHelloButton.style.color)
+    sayHelloButton.style.backgroundColor = 'black'
+}
+
+sayHelloButton.addEventListener('mouseover', helloColorChanger)
 
 // PROBLEM 3
 /*
@@ -33,6 +42,12 @@
 
 // CODE HERE
 
+const helloColorReverter = () => {
+    sayHelloButton.style.backgroundColor = ''
+    sayHelloButton.style.color = ''
+}
+
+sayHelloButton.addEventListener('mouseout', helloColorReverter)
 
 // PROBLEM 4
 /*
@@ -54,6 +69,8 @@ const sayHello = () => {
 
 // CODE HERE
 
+sayHelloButton.addEventListener('click', sayHello)
+
 
 // PROBLEM 5 
 /*
@@ -66,8 +83,23 @@ const sayHello = () => {
     Handle the promise that's returned with a .then, which you should pass a callback function to. Inside the callback function, console.log the response's data (in the intermediate instructions we'll come back to this function and add HTML).
 */ 
 
+/*  On each iteration of the loop, create a new p element. Set its textContent equal the string at the current index (i) and then append the new p element onto the document's body. 
+
+*/
+
 const ohMy = () => {
-    // YOUR CODE HERE
+    axios.get('http://localhost:3000/animals')
+        .then((res) => {
+            for (i=0; i < res.data.length; i++) {
+                let newP = document.createElement('p')
+                newP.textContent = res.data[i]
+                document.body.appendChild(newP)
+            }
+            console.log(res.data)
+        })
+        .catch ((error) => {
+            console.log(error)
+        })
 }
 
 document.getElementById('animals-button').addEventListener('click', ohMy)
@@ -87,8 +119,20 @@ document.getElementById('animals-button').addEventListener('click', ohMy)
 */
 
 const repeatMyParam = () => {
-    //YOUR CODE HERE
+    axios.get(`http://localhost:3000/repeat/${"love"}`)
+        .then((res) => {
+            console.log(res.data)
+            document.querySelector('#repeat-text').textContent = res.data
+            document.querySelector('#repeat-text').style.display = 'block'
+        })
+        .catch((error) => {
+            console.log(error)
+        })
+ 
+    // document.getElementById('#repeat-text').textContent = res.data
 }
+
+document.querySelector('#repeat-button').addEventListener('click', repeatMyParam)
 
 // PROBLEM 7
 /*
@@ -114,7 +158,15 @@ const repeatMyParam = () => {
 
 // CODE HERE
 
+const myFucnt = () => {
+    axios.get(`http://localhost:3000/query-test/?florg=blarg`)
+        .then((res) => {
+            console.log(res.data)
+        })
+        .catch(err => console.log(err))
+}
 
+document.querySelector('#query-button').addEventListener('click', myFucnt)
 
 ////////////////
 //INTERMEDIATE//
@@ -166,3 +218,58 @@ const repeatMyParam = () => {
 */
 
 // CODE HERE 
+
+const createFood = (event) => {
+    event.preventDefault()
+    foodInput = document.querySelector('input')
+    body = {
+        newFood: foodInput.value
+    }
+    axios.post("http://localhost:3000/food", body)
+        .then((res) => {
+            console.log(res.data)
+            for (i=0; i < res.data.length; i++) {
+                let newP = document.createElement('p')
+                newP.textContent = res.data[i]
+                document.body.appendChild(newP)
+            }
+
+            foodInput.value = ''
+        })
+        .catch(err => console.log(err))
+}
+
+document.querySelector("#foodBtn").addEventListener('click', createFood)
+
+
+// **Method from Mark**
+// const createFood = (event) => {
+//     event.preventDefault()
+
+//     let foodInput = document.querySelector('input');
+//     let list = document.querySelector('ul')
+//     let body = {
+//         newFood: foodInput.value,
+//     };
+
+//     axios.post(`http://localhost:3000/food`, body)
+//     .then((res) => {
+//         console.log(res.data);
+        
+//         for (let i =0; i < res.data.length; i++){
+//             let newPara = document.createElement('li');
+//             newPara.textContent = res.data[i];
+//             list.appendChild(newPara)
+//         }
+
+//         foodInput.value = ''
+//     })  
+//     .catch((err) => {
+//         console.log(err);
+//     });
+
+// };
+
+// let foodListBtn =  document.querySelector('#foodListBtn');
+
+// foodListBtn.addEventListener('click', createFood);
