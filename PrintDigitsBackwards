@@ -1,0 +1,10 @@
+const printDigits = num => {
+  reverse = 0
+  whileBreaker = true
+  while (num) {
+    reverse = num % 10
+    console.log(reverse) 
+    num = Math.floor(num/ 10)
+  }
+}
+printDigits(123)
