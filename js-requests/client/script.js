@@ -227,11 +227,27 @@ const createFood = (event) => {
     }
     axios.post("http://localhost:3000/food", body)
         .then((res) => {
-            console.log(res.data)
+            // The if statement checks to see if I've already created the div that will contain the following 'li' items, and if it does exist it removes all the 'li' items so they don't stack up on screen.  The else statement creates the div.
+            if (document.querySelector('#foodDiv')) {
+                while (document.querySelector('#foodDiv').firstChild) {
+                    document.querySelector('#foodDiv').removeChild(document.querySelector('#foodDiv').firstChild)
+                }
+            } else {
+                let foodDiv = document.createElement('div')
+                foodDiv.setAttribute('id', 'foodDiv')
+                document.body.appendChild(foodDiv)
+            }
+            
+            let j = 0
+
+            // Now that I've checked if the specific div exists (creating it if it doesn't, emptying it if it does), I can create my 'li' elements to hold the res.data values, appending them to the div.
             for (i=0; i < res.data.length; i++) {
-                let newP = document.createElement('p')
-                newP.textContent = res.data[i]
-                document.body.appendChild(newP)
+                let newLi = document.createElement('li')
+                // dynamically setting an ID# for each 'li' element was a way for me to test a bug I was having, but I kept it in because it's cool
+                newLi.setAttribute('id', `li${j}`)
+                j++
+                newLi.textContent = res.data[i]
+                document.getElementById('foodDiv').appendChild(newLi)
             }
 
             foodInput.value = ''
@@ -241,17 +257,37 @@ const createFood = (event) => {
 
 document.querySelector("#foodBtn").addEventListener('click', createFood)
 
+// Old code below this line assumed the array sent back from the server was the same as the array it expected
 
-// **Method from Mark**
+// function createFood(event) {
+//     event.preventDefault()
+//     foodInput = document.querySelector('input')
+//     body = {
+//         newFood: foodInput.value
+//     }
+//     axios.post("http://localhost:3000/food", body)
+//         .then((res) => {
+//             console.log(res.data[res.data.length -1])
+//             let newLi = document.createElement('li')
+//             newLi.textContent = res.data[res.data.length -1]
+//             document.body.appendChild(newLi)
+
+//             foodInput.value = ''
+//         })
+//         .catch(err => console.log(err))
+// }
+
+
+// **Method from Mark** saved to compare
 // const createFood = (event) => {
 //     event.preventDefault()
-
+    
 //     let foodInput = document.querySelector('input');
 //     let list = document.querySelector('ul')
 //     let body = {
 //         newFood: foodInput.value,
 //     };
-
+    
 //     axios.post(`http://localhost:3000/food`, body)
 //     .then((res) => {
 //         console.log(res.data);
@@ -261,13 +297,13 @@ document.querySelector("#foodBtn").addEventListener('click', createFood)
 //             newPara.textContent = res.data[i];
 //             list.appendChild(newPara)
 //         }
-
+        
 //         foodInput.value = ''
 //     })  
 //     .catch((err) => {
 //         console.log(err);
 //     });
-
+    
 // };
 
 // let foodListBtn =  document.querySelector('#foodListBtn');
